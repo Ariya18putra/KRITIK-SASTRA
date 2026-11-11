@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT Online - Kritik Sastra & Sinetron</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            500: '#103058',
+                            800: '#0b1d3a',
+                            900: '#071224',
+                        },
+                        electric: {
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f2347 100%);
+            min-height: 100vh;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2563eb;
+            border-radius: 4px;
+        }
+        .timer-ring {
+            transition: stroke-dashoffset 0.1s linear;
+        }
+        .card-blur {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-100 flex flex-col min-h-screen custom-scrollbar">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="card-blur sticky top-0 z-40 border-b border-slate-700/50 px-4 py-3 sm:px-6 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid me-0.5 fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide text-white">CBT Ujian Sastra</h1>
+                    <p class="text-xs text-blue-300">Kritik Sastra, Sinetron & Teorinya</p>
+                </div>
+            </div>
+            
+            <div id="userInfoHeader" class="hidden flex items-center gap-4 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700">
+                <div class="text-right hidden sm:block">
+                    <p id="headerStudentName" class="text-sm font-semibold text-white">Siswa</p>
+                    <p id="headerStudentId" class="text-xs text-blue-400">ID: -</p>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-blue-600/30 border border-blue-400 flex items-center justify-center text-blue-300 font-bold text-sm">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow flex items-center justify-center p-3 sm:p-6">
+        <div class="w-full max-w-6xl">
+
+            <!-- 1. HALAMAN LOGIN -->
+            <div id="loginPage" class="max-w-md mx-auto transition-all duration-300">
+                <div class="card-blur rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-700/60 relative overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-blue-600/20 rounded-full blur-2xl"></div>
+                    <div class="text-center mb-8 relative">
+                        <div class="inline-flex p-3 rounded-2xl bg-blue-600/20 text-blue-400 mb-3 border border-blue-500/30">
+                            <i class="fa-solid fa-laptop-code text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">Portal Login CBT</h2>
+                        <p class="text-slate-400 text-sm mt-1">Masukkan data diri untuk memulai tes online</p>
+                    </div>
+
+                    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Nama Lengkap</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                </span>
+                                <input type="text" id="inputName" required placeholder="Contoh: Budi Santoso" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white text-sm outline-none transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Nomor Ujian / ID</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                    <i class="fa-solid fa-id-card"></i>
+                                </span>
+                                <input type="text" id="inputId" required placeholder="Contoh: CBT-2025-089" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white text-sm outline-none transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Alamat Email</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </span>
+                                <input type="email" id="inputEmail" required placeholder="nama@email.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white text-sm outline-none transition">
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-blue-600/30 transition duration-200 flex items-center justify-center gap-2 group">
+                                <span>Masuk ke Kisi-Kisi</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 2. HALAMAN KISI-KISI -->
+            <div id="kisiPage" class="hidden transition-all duration-300">
+                <div class="card-blur rounded-2xl p-5 sm:p-8 shadow-2xl border border-slate-700/60">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-700/60">
+                        <div>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-blue-400"></i>
+                                Kisi-Kisi Integrasi Soal Ujian
+                            </h2>
+                            <p class="text-slate-400 text-sm mt-1">Total 25 Soal Pilihan Ganda | Durasi per soal: 30 Detik</p>
+                        </div>
+                        <button onclick="requestFullscreenModal()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2 self-start md:self-auto">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Mulai Quis Sekarang</span>
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-700/80">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-800/90 text-xs font-semibold uppercase text-blue-300 tracking-wider">
+                                <tr>
+                                    <th class="py-3 px-4 w-16 text-center border-b border-slate-700">No</th>
+                                    <th class="py-3 px-4 border-b border-slate-700">Sub-Materi / Topik Utama</th>
+                                    <th class="py-3 px-4 border-b border-slate-700">Indikator Ketercapaian Kompetensi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kisiTableBody" class="divide-y divide-slate-800 bg-slate-900/40">
+                                <!-- Generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. HALAMAN QUIS -->
+            <div id="quizPage" class="hidden transition-all duration-300">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Sidebar Navigation & Timer -->
+                    <div class="lg:col-span-1 order-2 lg:order-1 flex flex-col gap-4">
+                        <!-- Timer Box -->
+                        <div class="card-blur rounded-2xl p-5 border border-slate-700/60 flex flex-col items-center justify-center text-center">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Sisa Waktu Soal</span>
+                            <div class="relative w-28 h-28 flex items-center justify-center my-1">
+                                <svg class="w-full h-full transform -rotate-90">
+                                    <circle cx="56" cy="56" r="48" stroke="currentColor" stroke-width="8" class="text-slate-800" fill="transparent"/>
+                                    <circle id="timerCircle" cx="56" cy="56" r="48" stroke="currentColor" stroke-width="8" class="text-blue-500 timer-ring" fill="transparent" stroke-dasharray="301.59" stroke-dashoffset="0"/>
+                                </svg>
+                                <div class="absolute text-center">
+                                    <span id="timerText" class="text-3xl font-extrabold text-white">30</span>
+                                    <span class="block text-[10px] text-slate-400 -mt-1">Detik</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid Nomor Soal -->
+                        <div class="card-blur rounded-2xl p-5 border border-slate-700/60">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Navigasi Soal</span>
+                                <span class="text-xs text-blue-400 font-semibold" id="answeredCount">0 / 25 Terjawab</span>
+                            </div>
+                            <div id="questionGrid" class="grid grid-cols-5 gap-2">
+                                <!-- Number buttons generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soal Content Area -->
+                    <div class="lg:col-span-3 order-1 lg:order-2">
+                        <div class="card-blur rounded-2xl p-6 sm:p-8 border border-slate-700/60 flex flex-col justify-between min-h-[500px]">
+                            <div>
+                                <!-- Question Header -->
+                                <div class="flex justify-between items-center pb-4 mb-4 border-b border-slate-700/60">
+                                    <span class="bg-blue-600/20 text-blue-400 font-bold px-3 py-1 rounded-lg border border-blue-500/30 text-sm">
+                                        Soal No. <span id="currentQuestionNum">1</span> / 25
+                                    </span>
+                                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700" id="currentTopic">
+                                        Topik Soal
+                                    </span>
+                                </div>
+
+                                <!-- Question Text / Prompt -->
+                                <div class="mb-6">
+                                    <div id="questionText" class="text-slate-200 text-sm sm:text-base leading-relaxed space-y-3 font-normal">
+                                        <!-- Question text inserted by JS -->
+                                    </div>
+                                </div>
+
+                                <!-- Options List -->
+                                <div id="optionsContainer" class="space-y-3">
+                                    <!-- Radio options inserted by JS -->
+                                </div>
+                            </div>
+
+                            <!-- Bottom Action Buttons -->
+                            <div class="flex justify-between items-center pt-6 mt-6 border-t border-slate-700/60">
+                                <button id="btnPrev" onclick="navigatePrev()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold transition border border-slate-700 flex items-center gap-2">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                    <span>Sebelumnya</span>
+                                </button>
+
+                                <div class="flex gap-3">
+                                    <button id="btnNext" onclick="navigateNext()" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold shadow-lg shadow-blue-600/30 transition flex items-center gap-2">
+                                        <span>Berikutnya</span>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                    
+                                    <button id="btnFinish" onclick="confirmFinishQuiz()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-bold shadow-lg shadow-emerald-600/30 transition flex items-center gap-2">
+                                        <i class="fa-solid fa-check-circle"></i>
+                                        <span>Selesai Ujian</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 4. HALAMAN HASIL / RESULT -->
+            <div id="resultPage" class="hidden transition-all duration-300">
+                <div class="card-blur rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-700/60 max-w-4xl mx-auto">
+                    
+                    <div class="text-center mb-8 border-b border-slate-700/60 pb-6">
+                        <div class="inline-flex p-4 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 mb-3">
+                            <i class="fa-solid fa-award text-4xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-white">Hasil Ujian CBT</h2>
+                        <p class="text-slate-400 text-sm mt-1">Ujian Kritik Sastra, Sinetron & Teorinya Selesai Dilaksanakan</p>
+                    </div>
+
+                    <!-- Identity Card & Score Breakdown -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700/80 flex flex-col justify-center">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Identitas Peserta</h3>
+                            <p class="text-lg font-bold text-white" id="resName">-</p>
+                            <p class="text-xs text-blue-400 mt-1" id="resId">No: -</p>
+                            <p class="text-xs text-slate-400 mt-0.5" id="resEmail">-</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 p-5 rounded-xl border border-blue-500/40 flex flex-col items-center justify-center text-center">
+                            <span class="text-xs font-bold text-blue-300 uppercase tracking-wider">Skor Akhir</span>
+                            <span class="text-5xl font-extrabold text-white my-1" id="resFinalScore">0</span>
+                            <span class="text-xs text-blue-200">Skala Maksimal 100</span>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700/80 flex flex-col justify-around">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Benar:</span>
+                                <span class="font-bold text-emerald-400 text-lg" id="resCorrect">0</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm my-1">
+                                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-circle-xmark text-rose-400"></i> Salah:</span>
+                                <span class="font-bold text-rose-400 text-lg" id="resWrong">0</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-clock text-amber-400"></i> Total Soal:</span>
+                                <span class="font-bold text-white text-lg">25</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MUST SEND WA BANNER -->
+                    <div class="bg-gradient-to-r from-emerald-900/60 via-teal-900/60 to-slate-900 p-5 rounded-xl border-2 border-emerald-500/80 mb-8 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 text-2xl shrink-0">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">WAJIB: Kirim Hasil Nilai ke Penguji</h4>
+                                <p class="text-slate-300 text-xs mt-0.5">Sesuai ketentuan, hasil ujian wajib dikirimkan langsung ke WhatsApp nomor official: <strong class="text-emerald-300">085165394230</strong></p>
+                            </div>
+                        </div>
+                        <a id="btnSendWA" href="#" target="_blank" class="w-full md:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-3 px-6 rounded-xl shadow-lg shadow-emerald-500/30 transition duration-200 flex items-center justify-center gap-2 shrink-0 text-sm">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>Kirim WhatsApp Sekarang</span>
+                        </a>
+                    </div>
+
+                    <!-- Action Buttons: Download PDF & Review -->
+                    <div class="flex flex-wrap gap-4 justify-between items-center mb-8">
+                        <button onclick="downloadResults()" class="bg-slate-800 hover:bg-slate-700 text-blue-300 font-semibold py-2.5 px-5 rounded-xl border border-slate-700 transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-file-arrow-down"></i>
+                            <span>Download Hasil Nilai (TXT / Resume)</span>
+                        </button>
+
+                        <button onclick="toggleReviewSection()" class="bg-blue-600/30 hover:bg-blue-600/40 text-blue-300 font-semibold py-2.5 px-5 rounded-xl border border-blue-500/40 transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>Lihat Pembahasan Soal</span>
+                        </button>
+                    </div>
+
+                    <!-- Pembahasan Accordion / Section -->
+                    <div id="reviewSection" class="hidden border-t border-slate-700/60 pt-6 space-y-4">
+                        <h3 class="text-lg font-bold text-white mb-4">Pembahasan & Detail Jawaban</h3>
+                        <div id="reviewList" class="space-y-4">
+                            <!-- JS Populated -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL FULLSCREEN PERMISSION -->
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="card-blur rounded-2xl max-w-md w-full p-6 border border-slate-700 shadow-2xl text-center">
+            <div class="w-16 h-16 bg-blue-600/20 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
+                <i class="fa-solid fa-expand text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Konfirmasi Mode Layar Penuh</h3>
+            <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                Untuk menjaga integritas dan ketertiban ujian CBT, Anda diwajibkan mengaktifkan <strong>Mode Layar Penuh (Fullscreen)</strong> sebelum memulai quis.
+            </p>
+            <div class="flex gap-3">
+                <button onclick="denyFullscreen()" class="w-1/2 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition border border-slate-700">
+                    Batal / Kembali
+                </button>
+                <button onclick="acceptFullscreen()" class="w-1/2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-600/30 transition">
+                    Ya, Izinkan & Mulai
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM ALERT MODAL -->
+    <div id="alertModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="card-blur rounded-2xl max-w-sm w-full p-6 border border-slate-700 shadow-2xl text-center">
+            <div id="alertIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"></div>
+            <h4 id="alertTitle" class="text-lg font-bold text-white mb-1"></h4>
+            <p id="alertMessage" class="text-slate-300 text-xs mb-5"></p>
+            <div class="flex justify-center gap-3" id="alertButtons">
+                <button onclick="closeAlert()" class="py-2 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA KISI-KISI
+        const KISI_KISI_DATA = [
+            { no: "1 – 2", topic: "Berita & Dialog Kasus Sastra Indonesia", indicator: "Menganalisis dikotomi intrinsik vs ekstrinsik serta menerapkan pendekatan mimetik pada polemik sastra sejarah." },
+            { no: "3 – 5", topic: "Politik Karya Sastra Indonesia", indicator: "Menganalisis hubungan sastra dengan ideologi (Lekra vs Manikebu), pembredelan Orde Baru, dan hegemonik kekuasaan." },
+            { no: "6 – 10", topic: "Kritik Sinetron (Struktur Naratif & Industri)", indicator: "Menganalisis dampak sosial gaya hidup sinetron remaja, kelemahan alur striping, kritik feminisme, plagiasi, dan teori budaya massa." },
+            { no: "11 – 15", topic: "Kritik Sinetron (Analisis Penokohan / Karakter)", indicator: "Menilai tipe penokohan flat character, Mary Sue, character development, damsel in distress, dan anti-hero." },
+            { no: "16 – 20", topic: "Kritik Sinetron (Aspek Sosiologis & Teknik Skenario)", indicator: "Menganalisis bias kelas sosial, teknik Deus Ex Machina, riset profesi, kegagalan foreshadowing, serta fungsi cliffhanger." },
+            { no: "21 – 22", topic: "Komunitas Kepenulisan", indicator: "Menjelaskan peran peer review dan fungsi kritik komunitas dalam menjembatani ekspresi subjektif pengarang dengan kualitas objektif." },
+            { no: "23 – 25", topic: "Penalaran Kritik Sastra", indicator: "Menganalisis karya didaktis, menerapkan Teori Poskolonial, dan merumuskan hakikat kritik sastra yang konstruktif." }
+        ];
+
+        // MASTER DATA 25 SOAL
+        const QUESTIONS_DATA = [
+            {
+                id: 1,
+                topic: "Dialog Kasus Sastra 1",
+                question: `Perhatikan penggalan dialog investigasi berikut!<br><br>
+                <div class="p-3 bg-slate-900/90 rounded-lg border-l-4 border-blue-500 text-xs sm:text-sm italic space-y-2">
+                <p><strong>Jurnalis A:</strong> "Ramai sekali perbincangan di media sosial minggu ini mengenai cerpen kontroversial yang ditulis oleh sastrawan muda asal Yogyakarta itu. Banyak kritikus sastra kampus menyerangnya karena dianggap mengeksploitasi penderitaan masyarakat marginal demi sensasi semata tanpa riset sosiologis yang mendalam."</p>
+                <p><strong>Jurnalis B:</strong> "Benar. Namun, jika kita telaah menggunakan pendekatan objektif, struktur estetika dan permainan metaforanya sebenarnya sangat kuat. Di sinilah letak dilemanya: antara kebebasan ekspresi estetik pengarang dan tanggung jawab etis terhadap realitas sosial yang dikritiknya."</p>
+                </div><br>
+                Berdasarkan dialog di atas, esensi dari perdebatan kritik sastra tersebut berkaitan erat dengan...`,
+                options: {
+                    A: "Pertentangan antara mazhab sastra angkatan lama dan angkatan cyber modern.",
+                    B: "Dilema antara otonomi estetika karya (intrinsik) dan pertanggungjawaban sosial (ekstrinsik).",
+                    C: "Dominasi lembaga sensor pemerintah terhadap penerbitan buku sastra independen.",
+                    D: "Penolakan masyarakat awam terhadap penggunaan gaya bahasa hiperbola dalam cerpen.",
+                    E: "Kegagalan kritikus sastra dalam menggunakan teori strukturalisme murni."
+                },
+                correct: "B",
+                discussion: "Perdebatan antara kebebasan ekspresi estetika (aspek intrinsik/bentuk) dan tanggung jawab etis terhadap realitas sosial (aspek ekstrinsik/isi) merupakan inti dari dikotomi kritik sastra berbasis sosiologi sastra dan otonomi seni."
+            },
+            {
+                id: 2,
+                topic: "Dialog Kasus Sastra 2",
+                question: `Sebuah portal berita sastra daring memberitakan polemik peluncuran novel sejarah baru yang dianggap mendistorsi fakta tokoh pahlawan nasional. Seorang kritikus senior menyatakan dalam kolom komentarnya: “Penulis boleh saja menggunakan lisensi puitik (poetic license) untuk meramu fiksi, tetapi ketika fakta sejarah besar dibelokkan demi kepentingan komersial penerbit, maka kritikus wajib hadir untuk meluruskan distorsi tersebut agar pembaca tidak salah kaprah.”<br><br>
+                Dari kasus berita tersebut, teori kritik sastra yang paling tepat digunakan untuk menganalisis novel itu adalah...`,
+                options: {
+                    A: "Kritik Ekspresif, karena berfokus pada emosi dan maksud tersembunyi pengarang saat menulis.",
+                    B: "Kritik Mimetik, karena menyoroti sejauh mana karya sastra merefleksikan atau menyimpang dari kenyataan sejarah yang objektif.",
+                    C: "Kritik Pragmatik, karena menilai karya berdasarkan seberapa besar keuntungan komersial yang diperoleh penerbit.",
+                    D: "Kritik Objektif, karena hanya menganalisis jalinan unsur intrinsik tanpa peduli pada unsur luar.",
+                    E: "Kritik Reseptif, karena menyerahkan sepenuhnya makna teks kepada pemahaman masing-masing pembaca."
+                },
+                correct: "B",
+                discussion: "Kritik mimetik memandang karya sastra sebagai tiruan atau cerminan realitas (termasuk fakta sejarah). Ketika fiksi menyimpang dari kenyataan sejarah, kritik mimetik/historis sangat relevan digunakan."
+            },
+            {
+                id: 3,
+                topic: "Politik Karya Sastra 1",
+                question: `Dalam sejarah sastra Indonesia era 1960-an, terjadi pertarungan ideologi yang sengit antara Lembaga Kebudayaan Rakyat (Lekra) yang berhaluan kiri dengan para penandatangan Manifes Kebudayaan (Manikebu). Para sastrawan Lekra berpegang pada doktrin "Seni untuk Rakyat" atau politik sebagai panglima, di mana karya sastra wajib tunduk pada revolusi kaum tertindas.<br><br>
+                Jika seorang kritikus sastra masa kini menganalisis karya-karya era tersebut menggunakan lensa politik sastra, maka fungsi utama sastra menurut kubu Lekra adalah...`,
+                options: {
+                    A: "Sarana pelarian estetis individu dari tekanan rezim yang berkuasa.",
+                    B: "Komoditas pasar bebas yang tunduk pada hukum permintaan kapitalisme global.",
+                    C: "Alat propaganda ideologi dan instrumen perjuangan kelas sosial masyarakat.",
+                    D: "Media eksperimentasi bahasa tanpa batas moral dan ideologi politik.",
+                    E: "Dokumen historis yang netral tanpa keberpihakan politik tertentu."
+                },
+                correct: "C",
+                discussion: "Doktrin \"Seni untuk Rakyat\" menempatkan sastra sebagai alat perjuangan ideologi politik dan kelas pekerja."
+            },
+            {
+                id: 4,
+                topic: "Politik Karya Sastra 2",
+                question: `Sebuah berita nasional mengangkat kembali polemik pelarangan peredaran buku-buku bertema sejarah alternatif dan sastra kiri di Indonesia pada masa Orde Baru. Pemerintah saat itu menggunakan dalih "menjaga stabilitas nasional dan keamanan negara" untuk membredel novel-novel yang dianggap berbahaya secara politik.<br><br>
+                Ditinjau dari teori politik sastra, tindakan pembredelan tersebut mencerminkan pandangan bahwa...`,
+                options: {
+                    A: "Sastra memiliki kekuatan hegemonik yang ditakuti oleh penguasa karena mampu membentuk kesadaran kritis massa.",
+                    B: "Nilai intrinsik sebuah novel sastra ditentukan sepenuhnya oleh izin edar dari Departemen Penerangan.",
+                    C: "Pengarang fiksi tidak memiliki hak cipta atas gagasan politik yang dituangkan dalam karyanya.",
+                    D: "Pemerintah merupakan satu-satunya lembaga sah yang berhak menjadi dewan juri sastra nasional.",
+                    E: "Karya sastra murni bersifat steril dan tidak memiliki dampak apa pun terhadap kekuasaan politik."
+                },
+                correct: "A",
+                discussion: "Pembredelan karya sastra membuktikan bahwa penguasa menyadari daya dorong politik sastra dalam membangkitkan kesadaran kritis rakyat."
+            },
+            {
+                id: 5,
+                topic: "Politik Karya Sastra 3",
+                question: `Seorang penulis muda menerbitkan novel politik satire yang secara tajam menyindir oligarki kekuasaan dan dinasti politik di Indonesia. Alih-alih diapresiasi sebagai karya seni yang tinggi, buku tersebut mendapat tekanan birokrasi, diskusi bukunya dibubarkan paksa oleh oknum ormas, dan sang penulis diserang secara karakter di media sosial.<br><br>
+                Dalam kerangka teori politik sastra dan sosiologi pengarang, fenomena pembungkaman ini menunjukkan bahwa...`,
+                options: {
+                    A: "Sastra satire tidak memenuhi syarat baku unsur intrinsik cerita pendek modern.",
+                    B: "Ruang kebebasan berekspresi sastrawan sering kali berbenturan dengan kepentingan ekonomi-politik pihak yang hegemonik.",
+                    C: "Pembaca sastra di Indonesia sudah sangat jenuh dengan cerita yang bermuatan kritik politik.",
+                    D: "Kritikus sastra gagal membedakan mana karya fiksi murni dan mana laporan jurnalistik investigatif.",
+                    E: "Penerbit tidak profesional dalam memasarkan buku bergenre politik kepada masyarakat luas."
+                },
+                correct: "B",
+                discussion: "Kasus ini menunjukkan relasi kuasa antara teks sastra yang kritis dan struktur kekuasaan (politik-ekonomi) yang merasa terancam."
+            },
+            {
+                id: 6,
+                topic: "Kritik Sinetron 1 (SCTV)",
+                question: `Sinetron remaja bertajuk Asmara Gen Z / Gen-Z Romance yang tayang di SCTV sering kali menuai kritik tajam dari para pemerhati media dan psikolog anak. Alur cerita dalam sinetron tersebut kerap menampilkan gaya pacaran remaja usia sekolah menengah yang sangat berlebihan, mengabaikan etika akademis, dan mempertontonkan konflik hedonistis yang jauh dari realitas kehidupan pelajar sehari-hari.<br><br>
+                Jika kritikus media menganalisis fenomena ini menggunakan teori resepsi dan dampak sosial (efek media), kritik utama yang paling tepat dialamatkan pada sinetron tersebut adalah...`,
+                options: {
+                    A: "Lemahnya penggunaan efek CGI dan tata cahaya sinematografi kelas bioskop.",
+                    B: "Kegagalan fungsi edukasi media massa karena distorsi representasi moral dan gaya hidup remaja.",
+                    C: "Durasi penayangan iklan komersial yang terlalu panjang dibandingkan inti cerita.",
+                    D: "Pemilihan aktor pendatang baru yang tidak memiliki latar belakang sekolah teater.",
+                    E: "Penggunaan skenario dialog bahasa daerah yang kurang dipahami penonton nasional."
+                },
+                correct: "B",
+                discussion: "Kritik utama berfokus pada kegagalan fungsi edukasi media akibat representasi moral dan gaya hidup yang buruk bagi penonton remaja."
+            },
+            {
+                id: 7,
+                topic: "Kritik Sinetron 2 (Indosiar)",
+                question: `Sinetron harian Magic 5 di Indosiar sering mendapatkan sorotan dari kritikus pertelevisian karena pola penceritaan (plot) yang terlampau panjang, mengalami pengulangan konflik (looping conflict), serta penyelesaian masalah yang sering kali tidak logis secara kausalitas demi mengejar rating harian.<br><br>
+                Dari sudut pandang kritik struktur naratif, kelemahan mendasar dari model sinetron kejar tayang (striping) semacam ini adalah...`,
+                options: {
+                    A: "Kehilangan koherensi artistik dan kedalaman karakter akibat komersialisasi durasi siaran.",
+                    B: "Terlalu cepatnya resolusi konflik sehingga penonton tidak sempat memahami alur cerita.",
+                    C: "Penolakan total dari stasiun televisi terhadap sistem rating Nielsen.",
+                    D: "Penggunaan genre surealisme yang terlalu tinggi dalam teater tradisional Indonesia.",
+                    E: "Pengabaian mutlak terhadap unsur intrinsik berupa penokohan protagonis yang sempurna."
+                },
+                correct: "A",
+                discussion: "Sinetron striping berpanjang-panjang mengorbankan logika cerita dan koherensi naratif demi mempertahankan jam tayang dan rating."
+            },
+            {
+                id: 8,
+                topic: "Kritik Sinetron 3 (RCTI)",
+                question: `Sinetron Ikatan Cinta di RCTI sempat mencetak rekor rating tinggi, namun juga mendatangkan gelombang kritik dari sosiolog dan kritikus sastra populer. Kritik menyoroti bagaimana karakter utama wanita digambarkan terus-menerus menderita, mengalami ketidakadilan berlapis, namun tetap bergantung pada figur suami atau struktur patriarki untuk menyelamatkan hidupnya.<br><br>
+                Pendekatan kritik sastra/media yang paling relevan untuk membongkar ideologi di balik sinetron tersebut adalah...`,
+                options: {
+                    A: "Kritik Formalisme, karena fokus mengukur panjang pendeknya durasi adegan air mata.",
+                    B: "Kritik Feminis, karena menyoroti subordinasi perempuan dan pelanggengan budaya patriarki dalam narasi media.",
+                    C: "Kritik Biografis, karena meneliti latar belakang masa kecil sutradara sinetron tersebut.",
+                    D: "Kritik Struktural Murni, karena hanya menghitung jumlah pergeseran latar tempat cerita.",
+                    E: "Kritik Impresionistik, karena menilai keindahan busana yang dikenakan para pemeran utama."
+                },
+                correct: "B",
+                discussion: "Kritik feminis digunakan untuk menganalisis pelanggengan budaya patriarki dan subordinasi perempuan dalam narasi media."
+            },
+            {
+                id: 9,
+                topic: "Kritik Sinetron 4 (ANTV)",
+                question: `Sebuah serial drama televisi lokal di ANTV mendapat kritik dari netizen karena jalan cerita yang dianggap meniru mentah-mentah (plagiasi) alur drama seri luar negeri tanpa penyesuaian budaya lokal yang baik, disertai akting pemain yang kaku dan tata artistik latar yang tidak masuk akal bagi profesi tokohnya.<br><br>
+                Kritik terhadap aspek orisinalitas dan logika internal cerita ini dalam ranah kritik sastra/seni mencakup penilaian terhadap...`,
+                options: {
+                    A: "Kualitas estetika intrinsik yang rendah serta kurangnya integritas kreatif pencipta karya.",
+                    B: "Keberhasilan produsen meraup keuntungan finansial lewat strategi adaptasi global.",
+                    C: "Tingginya minat masyarakat terhadap budaya pop transnasional di era digital.",
+                    D: "Ketepatan lembaga sensor dalam memotong adegan kekerasan verbal.",
+                    E: "Pengaruh positif sinetron asing terhadap perkembangan bahasa Indonesia baku."
+                },
+                correct: "A",
+                discussion: "Plagiasi dan lemahnya logika cerita mencerminkan rendahnya kualitas estetika intrinsik serta integritas kreatif pengarang."
+            },
+            {
+                id: 10,
+                topic: "Kritik Sinetron 5 (Industri Rating)",
+                question: `Asosiasi Pengamat Televisi melayangkan kritik terbuka terhadap stasiun televisi swasta karena maraknya penayangan sinetron bertema azab atau perebutan harta warisan keluarga dengan judul provokatif. Kritikus menyebut bahwa tayangan ini mengalami "degradasi selera estetika publik" karena mengorbankan nilai edukasi demi perolehan iklan yang tinggi.<br><br>
+                Ditinjau dari teori kritik kebudayaan dan sastra massa, fenomena ini menunjukkan bahwa...`,
+                options: {
+                    A: "Industri media massa tunduk pada hukum pasar kapitalis yang memproduksi budaya pop komersial instan.",
+                    B: "Masyarakat penonton memiliki daya kritis yang sangat tinggi terhadap estetika tragedi klasik.",
+                    C: "Penulis skenario sinetron selalu menerapkan standar estetika Aristoteles dalam karyanya.",
+                    D: "Lembaga penyiaran publik sepenuhnya independen dari tekanan pengiklan komersial.",
+                    E: "Sinetron bertema azab merupakan puncak pencapaian tertinggi sastra realisme modern."
+                },
+                correct: "A",
+                discussion: "Budaya pop dalam industri TV digerakkan oleh hukum pasar kapitalis yang mengorbankan kualitas estetika demi perolehan profit semata."
+            },
+            {
+                id: 11,
+                topic: "Kritik Sinetron 6 (Penokohan Stereotip)",
+                question: `Dalam sinetron harian di SCTV, karakter Ibu Mertua (Tante Rika) digambarkan sangat jahat, selalu berteriak, merencanakan kejahatan fisik, dan tidak memiliki motivasi logis selain membenci menantunya tanpa alasan yang jelas. Penokohan ini dikritik oleh penulis skenario senior karena dianggap terlalu datar (flat character).<br><br>
+                Ditinjau dari teori penokohan (characterization), kelemahan utama penggambaran tokoh Tante Rika adalah...`,
+                options: {
+                    A: "Karakter terlalu kompleks sehingga sulit dipahami oleh penonton awam.",
+                    B: "Karakter tidak memiliki dimensi psikologis yang realistis (dimensionality) dan terjebak dalam stereotip hitam-putih.",
+                    C: "Tokoh antagonis seharusnya selalu dimainkan oleh aktor yang berusia muda.",
+                    D: "Dialog yang diucapkan tokoh antagonis kurang menggunakan bahasa asing.",
+                    E: "Penulis skenario terlalu banyak memberikan latar belakang sejarah masa kecil tokoh."
+                },
+                correct: "B",
+                discussion: "Karakter yang hanya memiliki satu sifat (jahat tanpa alasan logis) adalah flat character / stereotip yang kehilangan kompleksitas psikologis realistis (round character)."
+            },
+            {
+                id: 12,
+                topic: "Kritik Sinetron 7 (Mary Sue)",
+                question: `Sinetron Magic 5 Indosiar menampilkan tokoh utama wanita bernama Naura yang digambarkan sangat sempurna: cantik, selalu mengalah, sabar meskipun dizalimi puluhan kali, serba bisa, dan dicintai semua tokoh pria. Kritikus sastra mengkritik penokohan ini sebagai sindrom Mary Sue.<br><br>
+                Konsep Mary Sue dalam kritik penokohan cerita fiksi merujuk pada...`,
+                options: {
+                    A: "Tokoh utama wanita yang memiliki banyak kelemahan fatal hingga dibenci pembaca.",
+                    B: "Tokoh fiksi yang digambarkan terlalu sempurna tanpa cacat cela sehingga terasa tidak nyata dan membosankan.",
+                    C: "Tokoh pendukung yang tiba-tiba berubah menjadi musuh utama di akhir cerita.",
+                    D: "Tokoh protagonis yang bertindak sebagai narator serbatahu (omniscient narrator).",
+                    E: "Karakter fiksi yang diadaptasi langsung dari dongeng klasik Eropa."
+                },
+                correct: "B",
+                discussion: "Mary Sue adalah istilah kritik fiksi untuk karakter idealis buatan penulis yang terlalu sempurna, serba bisa, dan tak punya kelemahan sehingga menurunkan kadar realisme cerita."
+            },
+            {
+                id: 13,
+                topic: "Kritik Sinetron 8 (Character Development)",
+                question: `Dalam sinetron Ikatan Cinta RCTI, karakter Elsa awalnya diciptakan sebagai tokoh jahat manipulative. Namun, ketika sinetron mencapai episode 400+, watak Elsa mendadak berubah menjadi baik dan sangat bijak hanya dalam hitungan menit tanpa ada proses peristiwa traumatik atau kesadaran psikologis yang masuk akal (sudden change).<br><br>
+                Dalam kritik sastra, perubahan watak mendadak tanpa motivasi dramatik yang kuat ini melanggar prinsip...`,
+                options: {
+                    A: "Perkembangan karakter (character development) yang koheren dan rasional.",
+                    B: "Kebebasan pengarang dalam mengubah alur cerita secara mendadak.",
+                    C: "Sistem penokohan serba tunggal dalam drama tragedi.",
+                    D: "Penggunaan alur maju-mundur (flashback) dalam babak ketiga.",
+                    E: "Ketetapan genre komedi romantis pada pertelevisian Indonesia."
+                },
+                correct: "A",
+                discussion: "Perubahan watak tokoh (character development) harus didasari motivasi internal/eksternal yang masuk akal (kausalitas psikologis), bukan terjadi mendadak demi memanjangkan skenario."
+            },
+            {
+                id: 14,
+                topic: "Kritik Sinetron 9 (Damsel in Distress)",
+                question: `Pada sinetron Cinta Setelah Cinta SCTV, karakter utama perempuan sering kali digambarkan berada dalam situasi bahaya, menangis di pojok ruangan, dan selalu membutuhkan pertolongan dari tokoh pria utama untuk menyelesaikan setiap masalah hidupnya.<br><br>
+                Kritik sosiologi sastra menyoroti kiasan (trope) penokohan Damsel in Distress ini karena...`,
+                options: {
+                    A: "Mendidik penonton perempuan untuk mandiri secara finansial dan emosional.",
+                    B: "Melanggengkan stereotip gender bahwa perempuan adalah sosok lemah yang pasif dan butuh penyelamat pria.",
+                    C: "Menunjukkan tingkat akting yang sangat tinggi dari pemeran wanita utama.",
+                    D: "Mempercepat alur penyelesaian masalah dalam setiap episode kejar tayang.",
+                    E: "Menjadi bukti bahwa sinetron Indonesia menganut paham feminisme gelombang ketiga."
+                },
+                correct: "B",
+                discussion: "Trope Damsel in Distress (wanita lemah yang selalu butuh diselamatkan pria) dikritik karena melanggengkan stereotip ketidakberdayaan gender perempuan."
+            },
+            {
+                id: 15,
+                topic: "Kritik Sinetron 10 (Tokoh Anti-Hero)",
+                question: `Sebuah sinetron laga-modern di MNCTV menampilkan tokoh utama seorang mantan preman yang sering melanggar hukum, kasar, dan memiliki banyak cela moral, namun ia berjuang membela warga desanya dari pengusungan lahan oleh korporasi jahat. Kritikus mengapresiasi penokohan ini sebagai bentuk Anti-Hero.<br><br>
+                Ciri utama dari penokohan Anti-Hero dalam cerita fiksi/drama adalah...`,
+                options: {
+                    A: "Tokoh utama yang tidak memiliki satu pun kebaikan dan bertindak sebagai musuh utama.",
+                    B: "Tokoh utama yang kekurangan kualitas kebajikan konvensional (seperti kepahlawanan murni), namun tetap membuat penonton bersimpati pada perjuangannya.",
+                    C: "Tokoh figuran yang tidak memiliki pengaruh apa pun terhadap alur cerita utama.",
+                    D: "Tokoh antagonis yang bertobat di akhir babak cerita.",
+                    E: "Tokoh pahlawan super yang memiliki kekuatan gaib sejak lahir."
+                },
+                correct: "B",
+                discussion: "Anti-Hero adalah karakter utama yang tidak memiliki sifat pahlawan konvensional (bisa cacat moral/kasar), tetapi tujuan atau perjuangan akhirnya dapat diterima/didukung audience."
+            },
+            {
+                id: 16,
+                topic: "Kritik Sinetron 11 (Kelas Sosial)",
+                question: `Beberapa sinetron bertema konglomerat di RCTI/SCTV sering menampilkan kehidupan kelas atas yang diwarnai rumah megah, mobil mewah, dan gaya hidup glamor. Namun, tokoh pelayan rumah tangga (ART) selalu digambarkan ceroboh, bernada bicara lugu/konyol, dan menjadi objek lelucon.<br><br>
+                Ditinjau dari kritik sastra Marxis/Sosiologis, representasi penokohan ini dikritik karena...`,
+                options: {
+                    A: "Menunjukkan keadilan sosial bagi seluruh masyarakat Indonesia.",
+                    B: "Menguatkan bias kelas (class bias) dan stereotip merendahkan terhadap kelompok pekerja marginal.",
+                    C: "Terlalu fokus pada estetika tata busana kelas menengah ke atas.",
+                    D: "Menggunakan teknik komedi slapstick yang sangat intelek.",
+                    E: "Mengabaikan penggunaan kamera kualitas tinggi."
+                },
+                correct: "B",
+                discussion: "Penggambaran kelas bawah/pekerja sebagai sosok konyol/hina melanggengkan bias kelas sosial dan ketimpangan representasi di media."
+            },
+            {
+                id: 17,
+                topic: "Kritik Sinetron 12 (Deus Ex Machina)",
+                question: `Dalam episode puncak sebuah sinetron misteri di TV nasional, ketika tokoh utama terdesak dan hampir dibunuh oleh kejahatan musuhnya tanpa ada jalan keluar yang logis, tiba-tiba muncul petir gaib beserta tokoh misterius tanpa asal-usul yang menyelamatkannya dalam hitungan detik.<br><br>
+                Dalam kritik drama/sastra, teknik penyelesaian konflik semacam ini disebut...`,
+                options: {
+                    A: "In Media Res",
+                    B: "Deus Ex Machina",
+                    C: "Foreshadowing",
+                    D: "Cliffhanger",
+                    E: "Catharsis"
+                },
+                correct: "B",
+                discussion: "Deus Ex Machina adalah teknik penyelesaian konflik cerita secara tiba-tiba dan tidak logis melalui intervensi kekuatan luar/karakter tak berdasar."
+            },
+            {
+                id: 18,
+                topic: "Kritik Sinetron 13 (Distorsi Profesi)",
+                question: `Seorang kritikus memprotes penokohan karakter Dokter dan Pengacara dalam sebuah sinetron stripping populer. Dalam cerita, sang Dokter dapat meninggalkan operasi pasien demi mengejar pacarnya, dan Pengacara secara bebas mengancam saksi di dalam ruang sidang tanpa teguran hakim.<br><br>
+                Kritik terhadap penggambaran perwatakan profesi tersebut didasari oleh lemahnya...`,
+                options: {
+                    A: "Riset realitas (mimesis) dan logika profesi dalam membangun perwatakan tokoh.",
+                    B: "Honor yang diterima oleh para pemeran figuran sinetron.",
+                    C: "Penggunaan tata musik latar (soundtrack) pada adegan tegang.",
+                    D: "Keberanian sutradara menembus batas genre fiksi ilmiah.",
+                    E: "Kemampuan aktor dalam menghafal naskah panjang."
+                },
+                correct: "A",
+                discussion: "Penokohan profesi yang tidak akurat menunjukkan minimnya riset mimetik (realitas) penulis skenario terhadap aturan dunia nyata."
+            },
+            {
+                id: 19,
+                topic: "Kritik Sinetron 14 (Foreshadowing)",
+                question: `Pada awal episode sinetron drama Merangkai Kisah, disisipkan tanda-tanda (foreshadowing) bahwa tokoh A memiliki penyakit mematikan. Namun karena sinetron diperpanjang hingga 300 episode, penyakit tokoh A tidak pernah dibahas lagi dan hilang begitu saja dari ingatan skenario.<br><br>
+                Kelemahan teknis penulisan ini menunjukkan cacat pada aspek...`,
+                options: {
+                    A: "Pacing dan konsistensi elemen foreshadowing dalam struktur naratif.",
+                    B: "Pemilihan lokasi syuting luar ruangan (outdoor).",
+                    C: "Kualitas vokal aktor saat melakukan pengisian suara (dubbing).",
+                    D: "Penentuan jam tayang utama (prime time) stasiun TV.",
+                    E: "Perizinan hak cipta lagu tema sinetron."
+                },
+                correct: "A",
+                discussion: "Foreshadowing (petunjuk awal) yang diabaikan di pertengahan cerita merusak konsistensi naratif dan kerapian struktur alur."
+            },
+            {
+                id: 20,
+                topic: "Kritik Sinetron 15 (Cliffhanger)",
+                question: `Sinetron harian di Indonesia kerap mengakhiri setiap episodenya dengan adegan zoom-in wajah tokoh yang terkejut secara berulang-ulang disertai musik keras di saat konflik sedang puncak-puncaknya (cliffhanger).<br><br>
+                Tujuan utama penggunaan teknik cliffhanger berlebihan pada industri sinetron striping ditinjau dari teori pragmatik media adalah...`,
+                options: {
+                    A: "Membantu penonton untuk tertidur lelap setelah menonton TV.",
+                    B: "Mengikat perhatian psikologis penonton agar terus penasaran dan kembali menonton episode berikutnya.",
+                    C: "Menunjukkan keahlian teknis juru kamera dalam mengoperasikan lensa zoom.",
+                    D: "Menyelesaikan seluruh konflik cerita secara tuntas di setiap episode.",
+                    E: "Memenuhi standar kelayakan sensor Komisi Penyiaran Indonesia."
+                },
+                correct: "B",
+                discussion: "Cliffhanger adalah strategi pragmatik naratif untuk memanipulasi rasa penasaran audiens agar tidak beralih ke saluran lain di episode berikutnya."
+            },
+            {
+                id: 21,
+                topic: "Komunitas Kepenulisan 1",
+                question: `Di sebuah kota, komunitas literasi lokal rutin mengadakan acara "Bedah Naskah dan Peer Review". Dalam sesi tersebut, seorang anggota membacakan draf cerpennya, lalu anggota lain memberikan kritik konstruktif mulai dari kelemahan penokohan, plot yang lambat, hingga diksi klise. Penulis muda tersebut merasa wawasannya terbuka dan tahu bagian mana yang harus direvisi.<br><br>
+                Manfaat utama dari keberadaan komunitas sharing kepenulisan berdasarkan ilustrasi di atas adalah...`,
+                options: {
+                    A: "Menjadi wadah legal untuk mempublikasikan buku tanpa melalui proses penerbitan mayor.",
+                    B: "Mempercepat proses komersialisasi karya agar langsung menjadi best seller nasional.",
+                    C: "Menggantikan peran dewan juri sayembara sastra resmi tingkat nasional.",
+                    D: "Memberikan ruang kritik internal yang objektif untuk mengasah ketajaman estetik dan teknis menulis.",
+                    E: "Menjamin karya anggota terbebas dari segala bentuk pajak royalti kepenulisan."
+                },
+                correct: "D",
+                discussion: "Komunitas sharing kepenulisan berfungsi sebagai ruang belajar bersama di mana kritik sejawat (peer review) membantu mengasah keterampilan teknis dan kepekaan estetik penulis."
+            },
+            {
+                id: 22,
+                topic: "Komunitas Kepenulisan 2",
+                question: `Sebuah komunitas menulis digital menerapkan sistem kurasi ketat. Setiap naskah puisi yang diunggah harus melewati forum bedah karya bersama mentor sebelum dipublikasikan. Suatu ketika, terjadi perdebatan hangat ketika mentor mengkritik puisi anggota baru karena terlalu sentimental dan klise, sementara sang penulis bersikeras bahwa karyanya adalah ekspresi jiwa yang murni tanpa aturan kritik.<br><br>
+                Pelajaran teoretis kritik sastra yang bisa dipetik dari konflik di komunitas tersebut adalah...`,
+                options: {
+                    A: "Ekspresi emosi murni pengarang tidak memerlukan teknik diksi dan struktur bahasa yang baik.",
+                    B: "Kritik sastra di dalam komunitas berfungsi menjembatani antara subjektivitas pengarang dan objektivitas kualitas estetik pembaca.",
+                    C: "Mentor komunitas memiliki kekuasaan mutlak untuk membunuh kreativitas penulis pemula.",
+                    D: "Puisi yang baik adalah puisi yang paling banyak mendulang tanda suka (like) di media sosial.",
+                    E: "Aturan penulisan sastra bersifat mutlak dan tidak boleh diubah oleh siapa pun."
+                },
+                correct: "B",
+                discussion: "Kritik sastra dalam komunitas membantu menengahi antara ekspresi personal pengarang (subjektif) dengan standar kualitas estetik universal (objektif)."
+            },
+            {
+                id: 23,
+                topic: "Soal Penalaran 1 (Teori Kritik)",
+                question: `Perhatikan penggalan resensi kritikus terhadap sebuah novel berikut!<br><br>
+                <div class="p-3 bg-slate-900/90 rounded-lg border-l-4 border-blue-500 text-xs sm:text-sm italic">
+                "Novel ini gagal meyakinkan pembaca karena pengarang terlalu menggurui (didaktis). Alih-alih membiarkan karakter bergerak secara alami sesuai motivasi psikologisnya, pengarang justru kerap menyelipkan pidato moral di tengah dialog tokohnya."
+                </div><br>
+                Berdasarkan penalaran kritik sastra, kelemahan utama novel tersebut terletak pada pelanggaran terhadap prinsip...`,
+                options: {
+                    A: "Otonomi karya sastra dan hukum probabilitas intrinsik (keterpercayaan tokoh).",
+                    B: "Kesesuaian jumlah halaman dengan harga jual buku di pasaran.",
+                    C: "Penggunaan ejaan bahasa Indonesia yang disempurnakan.",
+                    D: "Pemilihan latar tempat di daerah pedesaan terpencil.",
+                    E: "Kepatuhan terhadap mazhab sastra angkatan pujangga baru."
+                },
+                correct: "A",
+                discussion: "Kritik terhadap novel yang terlalu menggurui (didaktis) dan merusak motivasi psikologis tokoh melanggar prinsip otonomi karya serta hukum probabilitas (keindahan intrinsik yang hidup wajar)."
+            },
+            {
+                id: 24,
+                topic: "Soal Penalaran 2 (Aliran Kritik)",
+                question: `Seorang kritikus sastra meneliti sebuah novel poskolonial dengan cara melihat bagaimana struktur bahasa dalam teks tersebut merekam jejak kekuasaan kolonial, perlawanan kaum pribumi, serta bagaimana identitas budaya lokal ditekan atau disuarakan kembali melalui celah-celah narasi.<br><br>
+                Pendekatan kritik sastra yang paling tepat diandalkan oleh kritikus tersebut adalah...`,
+                options: {
+                    A: "Kritik Strukturalisme Genetik dan New Criticism.",
+                    B: "Kritik Poskolonial dan dekonstruksi kekuasaan wacana.",
+                    C: "Kritik Ekspresif murni biografis pengarang.",
+                    D: "Kritik Moralistik tradisional abad pertengahan.",
+                    E: "Kritik Impresionistik penikmat seni amatir."
+                },
+                correct: "B",
+                discussion: "Analisis mengenai jejak kekuasaan kolonial, perlawanan, dan identitas budaya lokal merupakan ciri utama penerapan teori Kritik Poskolonial."
+            },
+            {
+                id: 25,
+                topic: "Soal Penalaran 3 (Hakikat Kritik)",
+                question: `Simak pernyataan logis berikut:<br><br>
+                <div class="p-3 bg-slate-900/90 rounded-lg border-l-4 border-blue-500 text-xs sm:text-sm italic">
+                "Kritik sastra bukanlah kegiatan 'mencari-cari kesalahan' pengarang dengan nada menghakimi, melainkan sebuah jembatan dialogis untuk memaknai kedalaman lapis makna sebuah teks agar pembaca dapat menikmati karya dengan wawasan yang lebih luas dan komprehensif."
+                </div><br>
+                Berdasarkan pernyataan di atas, simpulan yang paling benar mengenai hakikat kritik sastra yang ideal adalah...`,
+                options: {
+                    A: "Kritik sastra bersifat destruktif dan mematikan gairah menulis sastrawan pemula.",
+                    B: "Kritikus memiliki kedudukan yang lebih tinggi dan berkuasa mutlak dibandingkan pengarang.",
+                    C: "Kritik sastra merupakan instrumen apresiation, interpretasi, dan evaluasi yang konstruktif terhadap teks.",
+                    D: "Tugas utama kritikus adalah mengubah novel fiksi menjadi naskah laporan ilmiah.",
+                    E: "Penilaian kritikus bersifat mutlak dan tidak boleh dibantah oleh pembaca lain."
+                },
+                correct: "C",
+                discussion: "Hakikat kritik sastra yang ideal adalah sebagai sarana apresiasi, interpretasi, dan evaluasi yang membangun (konstruktif), bukan sekadar mencari kesalahan."
+            }
+        ];
+
+        // STATE APP
+        let currentUser = { name: '', id: '', email: '' };
+        let currentQuestionIndex = 0;
+        let userAnswers = {}; // { qIndex: 'A' }
+        let timerSeconds = 30;
+        let timerInterval = null;
+        let isReviewOpen = false;
+
+        // INIT APP
+        window.onload = function() {
+            renderKisiTable();
+            renderQuestionGrid();
+        };
+
+        // RENDER KISI TABLE
+        function renderKisiTable() {
+            const tbody = document.getElementById('kisiTableBody');
+            tbody.innerHTML = KISI_KISI_DATA.map(item => `
+                <tr class="hover:bg-slate-800/50 transition">
+                    <td class="py-3 px-4 text-center font-bold text-blue-400 border-b border-slate-800">${item.no}</td>
+                    <td class="py-3 px-4 font-semibold text-slate-200 border-b border-slate-800">${item.topic}</td>
+                    <td class="py-3 px-4 text-slate-300 border-b border-slate-800">${item.indicator}</td>
+                </tr>
+            `).join('');
+        }
+
+        // LOGIN HANDLER
+        function handleLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('inputName').value.trim();
+            const id = document.getElementById('inputId').value.trim();
+            const email = document.getElementById('inputEmail').value.trim();
+
+            if (!name || !id || !email) {
+                showAlert('Error', 'Harap lengkapi seluruh data login!', 'error');
+                return;
+            }
+
+            currentUser = { name, id, email };
+
+            // Update UI Header
+            document.getElementById('headerStudentName').innerText = name;
+            document.getElementById('headerStudentId').innerText = `ID: ${id}`;
+            document.getElementById('userInfoHeader').classList.remove('hidden');
+
+            // Switch page to Kisi-kisi
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('kisiPage').classList.remove('hidden');
+        }
+
+        // FULLSCREEN MODAL CONTROLS
+        function requestFullscreenModal() {
+            document.getElementById('fullscreenModal').classList.remove('hidden');
+        }
+
+        function denyFullscreen() {
+            document.getElementById('fullscreenModal').classList.add('hidden');
+            // Tetap di halaman kisi-kisi
+            showAlert('Info', 'Anda membatalkan masuk quis. Kembali ke Halaman Kisi-Kisi.', 'info');
+        }
+
+        function acceptFullscreen() {
+            document.getElementById('fullscreenModal').classList.add('hidden');
+            
+            // Request browser fullscreen mode
+            const docEl = document.documentElement;
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen().catch(err => console.log(err));
+            } else if (docEl.webkitRequestFullscreen) {
+                docEl.webkitRequestFullscreen();
+            } else if (docEl.msRequestFullscreen) {
+                docEl.msRequestFullscreen();
+            }
+
+            // Start Quiz
+            startQuiz();
+        }
+
+        // START QUIZ
+        function startQuiz() {
+            document.getElementById('kisiPage').classList.add('hidden');
+            document.getElementById('quizPage').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            loadQuestion(0);
+        }
+
+        // RENDER QUESTION GRID
+        function renderQuestionGrid() {
+            const grid = document.getElementById('questionGrid');
+            grid.innerHTML = QUESTIONS_DATA.map((_, idx) => `
+                <button id="qBtn-${idx}" onclick="jumpToQuestion(${idx})" class="w-full aspect-square rounded-lg font-bold text-xs border border-slate-700 bg-slate-800 text-slate-300 hover:border-blue-500 transition flex items-center justify-center">
+                    ${idx + 1}
+                </button>
+            `).join('');
+        }
+
+        function updateQuestionGridUI() {
+            let answered = 0;
+            QUESTIONS_DATA.forEach((_, idx) => {
+                const btn = document.getElementById(`qBtn-${idx}`);
+                if (!btn) return;
+                
+                const isCurrent = idx === currentQuestionIndex;
+                const hasAnswer = userAnswers[idx] !== undefined;
+
+                if (hasAnswer) answered++;
+
+                // Reset base styling
+                btn.className = "w-full aspect-square rounded-lg font-bold text-xs border transition flex items-center justify-center ";
+
+                if (isCurrent) {
+                    btn.className += "ring-2 ring-blue-400 bg-blue-600 text-white border-blue-400 font-extrabold shadow-lg shadow-blue-600/50";
+                } else if (hasAnswer) {
+                    btn.className += "bg-emerald-600/80 text-white border-emerald-500";
+                } else {
+                    btn.className += "bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-700";
+                }
+            });
+
+            document.getElementById('answeredCount').innerText = `${answered} / 25 Terjawab`;
+        }
+
+        // LOAD QUESTION
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = QUESTIONS_DATA[index];
+
+            document.getElementById('currentQuestionNum').innerText = index + 1;
+            document.getElementById('currentTopic').innerText = q.topic;
+            document.getElementById('questionText').innerHTML = q.question;
+
+            // Render Options
+            const container = document.getElementById('optionsContainer');
+            const selectedOpt = userAnswers[index];
+
+            container.innerHTML = Object.entries(q.options).map(([key, val]) => {
+                const isChecked = selectedOpt === key;
+                return `
+                    <label onclick="selectOption('${key}')" class="flex items-start p-3.5 rounded-xl border transition cursor-pointer ${
+                        isChecked 
+                        ? 'bg-blue-600/20 border-blue-500 text-white ring-1 ring-blue-500' 
+                        : 'bg-slate-900/60 border-slate-700/80 text-slate-300 hover:bg-slate-800/60 hover:border-slate-600'
+                    }">
+                        <div class="flex items-center h-5 mr-3 mt-0.5">
+                            <input type="radio" name="optRadio" value="${key}" ${isChecked ? 'checked' : ''} class="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                        </div>
+                        <div class="text-sm">
+                            <span class="font-bold text-blue-400 mr-1.5">${key}.</span>
+                            <span>${val}</span>
+                        </div>
+                    </label>
+                `;
+            }).join('');
+
+            // Controls Button State
+            document.getElementById('btnPrev').style.visibility = index === 0 ? 'hidden' : 'visible';
+            
+            if (index === QUESTIONS_DATA.length - 1) {
+                document.getElementById('btnNext').classList.add('hidden');
+                document.getElementById('btnFinish').classList.remove('hidden');
+            } else {
+                document.getElementById('btnNext').classList.remove('hidden');
+                document.getElementById('btnFinish').classList.add('hidden');
+            }
+
+            updateQuestionGridUI();
+            resetTimer();
+        }
+
+        function selectOption(key) {
+            userAnswers[currentQuestionIndex] = key;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // TIMER 30 SECONDS PER QUESTION
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerSeconds = 30;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    // Timeout -> Automatic go to next question
+                    if (currentQuestionIndex < QUESTIONS_DATA.length - 1) {
+                        navigateNext();
+                    } else {
+                        finishQuiz();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timerText').innerText = timerSeconds;
+            
+            // Circular SVG animation calculation (r=48, circumference ~ 301.59)
+            const circle = document.getElementById('timerCircle');
+            const circumference = 2 * Math.PI * 48; // ~301.59
+            const offset = circumference - (timerSeconds / 30) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            // Change color warning
+            if (timerSeconds <= 5) {
+                circle.classList.remove('text-blue-500', 'text-amber-500');
+                circle.classList.add('text-rose-500');
+            } else if (timerSeconds <= 10) {
+                circle.classList.remove('text-blue-500', 'text-rose-500');
+                circle.classList.add('text-amber-500');
+            } else {
+                circle.classList.remove('text-amber-500', 'text-rose-500');
+                circle.classList.add('text-blue-500');
+            }
+        }
+
+        // NAVIGATION
+        function navigateNext() {
+            if (currentQuestionIndex < QUESTIONS_DATA.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        function navigatePrev() {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        // FINISH QUIZ
+        function confirmFinishQuiz() {
+            const answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount < 25) {
+                showAlert('Konfirmasi', `Anda baru menjawab ${answeredCount} dari 25 soal. Yakin ingin mengakhiri ujian sekarang?`, 'confirm', () => {
+                    finishQuiz();
+                });
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+
+            // Exit Fullscreen if active
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.log(err));
+            }
+
+            // Calculate Score
+            let correct = 0;
+            QUESTIONS_DATA.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) {
+                    correct++;
+                }
+            });
+
+            const wrong = QUESTIONS_DATA.length - correct;
+            const finalScore = Math.round((correct / QUESTIONS_DATA.length) * 100);
+
+            // Populate Result Page
+            document.getElementById('resName').innerText = currentUser.name;
+            document.getElementById('resId').innerText = `No: ${currentUser.id}`;
+            document.getElementById('resEmail').innerText = currentUser.email;
+
+            document.getElementById('resFinalScore').innerText = finalScore;
+            document.getElementById('resCorrect').innerText = correct;
+            document.getElementById('resWrong').innerText = wrong;
+
+            // Format WA Link
+            const waPhone = "6285165394230";
+            const waText = encodeURIComponent(
+                `*LAPORAN HASIL UJIAN CBT ONLINE*\n` +
+                `------------------------------------\n` +
+                `*Nama Lengkap:* ${currentUser.name}\n` +
+                `*Nomor Ujian:* ${currentUser.id}\n` +
+                `*Email:* ${currentUser.email}\n\n` +
+                `*Materi:* Kritik Sastra, Sinetron & Teorinya\n` +
+                `*Jawaban Benar:* ${correct} / 25\n` +
+                `*Jawaban Salah:* ${wrong} / 25\n` +
+                `*SKOR AKHIR:* ${finalScore} / 100\n` +
+                `------------------------------------\n` +
+                `_Pesan otomatis dikirim via Portal CBT_`
+            );
+
+            document.getElementById('btnSendWA').href = `https://wa.me/${waPhone}?text=${waText}`;
+
+            // Render Review
+            renderReviewList();
+
+            // Switch Screen
+            document.getElementById('quizPage').classList.add('hidden');
+            document.getElementById('resultPage').classList.remove('hidden');
+        }
+
+        // RENDER REVIEW & PEMBAHASAN
+        function renderReviewList() {
+            const list = document.getElementById('reviewList');
+            list.innerHTML = QUESTIONS_DATA.map((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correct;
+
+                return `
+                    <div class="bg-slate-900/90 rounded-xl p-4 border ${isCorrect ? 'border-emerald-500/40' : 'border-rose-500/40'}">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-sm ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}">
+                                Soal No. ${idx + 1} - ${isCorrect ? 'BENAR' : 'SALAH / KOSONG'}
+                            </span>
+                            <span class="text-xs text-slate-400">${q.topic}</span>
+                        </div>
+                        <div class="text-xs sm:text-sm text-slate-200 mb-3">${q.question}</div>
+                        <div class="text-xs space-y-1 mb-3">
+                            <p class="text-slate-300">Jawaban Anda: <strong class="${isCorrect ? 'text-emerald-400' : 'text-rose-400'}">${userAns ? userAns + '. ' + q.options[userAns] : 'Tidak Dijawab'}</strong></p>
+                            <p class="text-slate-300">Jawaban Benar: <strong class="text-emerald-400">${q.correct}. ${q.options[q.correct]}</strong></p>
+                        </div>
+                        <div class="p-3 bg-slate-800/80 rounded-lg text-xs border border-slate-700 text-slate-300">
+                            <strong class="text-blue-400 block mb-1">Pembahasan:</strong>
+                            ${q.discussion}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleReviewSection() {
+            const sec = document.getElementById('reviewSection');
+            isReviewOpen = !isReviewOpen;
+            if (isReviewOpen) {
+                sec.classList.remove('hidden');
+            } else {
+                sec.classList.add('hidden');
+            }
+        }
+
+        // DOWNLOAD RESULTS RECORD (TXT FILE / PRINTABLE)
+        function downloadResults() {
+            let correct = 0;
+            QUESTIONS_DATA.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) correct++;
+            });
+            const score = Math.round((correct / 25) * 100);
+
+            const content = 
+`====================================================
+RESUME HASIL UJIAN COMPUTER BASED TEST (CBT)
+Materi: Kritik Sastra, Sinetron & Teorinya
+====================================================
+Tanggal: ${new Date().toLocaleString('id-ID')}
+
+IDENTITAS PESERTA:
+- Nama Lengkap : ${currentUser.name}
+- Nomor Ujian  : ${currentUser.id}
+- Alamat Email : ${currentUser.email}
+
+PEROLEHAN NILAI:
+- Jumlah Soal  : 25
+- Jawaban Benar: ${correct}
+- Jawaban Salah: ${25 - correct}
+- SKOR AKHIR   : ${score} / 100
+
+RINCIAN JAWABAN PESERTA:
+` + QUESTIONS_DATA.map((q, idx) => `Soal ${idx + 1}: Jwb = ${userAnswers[idx] || '-'} | Kunci = ${q.correct} [${userAnswers[idx] === q.correct ? 'BENAR' : 'SALAH'}]`).join('\n') +
+`\n====================================================
+Catatan: Wajib mengirimkan resume nilai ini ke WA Penguji: 085165394230
+====================================================`;
+
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Hasil_CBT_${currentUser.id}_${currentUser.name.replace(/\s+/g, '_')}.txt`;
+            link.click();
+        }
+
+        // CUSTOM ALERT SYSTEM
+        function showAlert(title, message, type = 'info', onConfirm = null) {
+            const modal = document.getElementById('alertModal');
+            const icon = document.getElementById('alertIcon');
+            const titleEl = document.getElementById('alertTitle');
+            const msgEl = document.getElementById('alertMessage');
+            const btns = document.getElementById('alertButtons');
+
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+
+            if (type === 'error') {
+                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-xl bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                icon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+            } else if (type === 'confirm') {
+                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-xl bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                icon.innerHTML = `<i class="fa-solid fa-circle-question"></i>`;
+            } else {
+                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-xl bg-blue-500/20 text-blue-400 border border-blue-500/30";
+                icon.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+            }
+
+            if (type === 'confirm' && onConfirm) {
+                btns.innerHTML = `
+                    <button onclick="closeAlert()" class="py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition border border-slate-700">Batal</button>
+                    <button id="alertConfirmBtn" class="py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition">Ya, Lanjutkan</button>
+                `;
+                document.getElementById('alertConfirmBtn').onclick = () => {
+                    closeAlert();
+                    onConfirm();
+                };
+            } else {
+                btns.innerHTML = `<button onclick="closeAlert()" class="py-2 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition">OK</button>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeAlert() {
+            document.getElementById('alertModal').classList.add('hidden');
+        }
+    </script>
+</body>
+                                          </html>
